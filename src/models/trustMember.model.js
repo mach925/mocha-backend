@@ -1,7 +1,7 @@
 'use strict'
 
 /*
- This model is one for contacts of Trust Networks.
+ This model is one for trust members of Trust Networks.
 */
 
 import mongoose from 'mongoose';
@@ -14,7 +14,7 @@ const states = {
   STATE_APPROVED: 1,
 };
 
-class ContactModel extends BaseModel {
+class TrustMemberModel extends BaseModel {
 
   constructor() {
 
@@ -35,14 +35,14 @@ class ContactModel extends BaseModel {
       }
     };
 
-    super( 'Contact', schema );
+    super( 'TrustMember', schema );
   }
 }
 
-const contactModel = new ContactModel();
+const trustMemberModel = new TrustMemberModel();
 
 Object.keys(states).map((stateKey) => {
-  Object.defineProperty(contactModel, stateKey, {
+  Object.defineProperty(trustMemberModel, stateKey, {
     value: states[stateKey],
     writable: false,
     enumerable: true,
@@ -51,5 +51,5 @@ Object.keys(states).map((stateKey) => {
 });
 
 module.exports = {
-  Contact: contactModel
+  TrustMember: trustMemberModel
 };

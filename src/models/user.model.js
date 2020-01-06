@@ -14,7 +14,7 @@ class UserModel extends BaseModel {
   constructor() {
 
     const schema = {
-      email: {
+      phone: {
         type: String,
         required: true,
         trim: true,
@@ -30,7 +30,7 @@ class UserModel extends BaseModel {
         required: false,
         trim: true
       },
-      image: {
+      avatar: {
         type: String,
         trim: true
       },
