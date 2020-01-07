@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     if (payload == null) {
       throw 'api.auth.token.invalid' // 'Invalid token'
     }
-    const user = await User.findOneById(payload.id)
+    const user = await User.findOneById(payload._id)
     if (user == null) {
       throw 'api.auth.token.user.none' // 'Invalid token: user not found'
     }
