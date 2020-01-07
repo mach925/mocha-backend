@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { User } = require('../models/user.model');
-const { verifyToken } = require('../services/auth');
+const { verifyToken } = require('../services/auth.service');
 
 const whitelist = {
   '/auth/send-sms': true,

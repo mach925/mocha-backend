@@ -1,6 +1,6 @@
 const { User } = require('../../../models/user.model');
 const { Sms } = require('../../../models/sms.model');
-const { generateToken } = require('../../../services/auth');
+const { generateToken } = require('../../../services/auth.service');
 
 module.exports = async (req, res) => {
 
