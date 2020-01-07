@@ -1,12 +1,12 @@
-const _ = require('lodash')
+const _ = require('lodash');
 
-const { User } = require('../models/user.model')
-const { verifyToken } = require('../services/auth')
+const { User } = require('../models/user.model');
+const { verifyToken } = require('../services/auth');
 
 const whitelist = {
   '/auth/send-sms': true,
   '/auth/validate-sms': true
-}
+};
 
 module.exports = async (req, res, next) => {
   if (whitelist[req.path] === true) {
@@ -36,7 +36,7 @@ module.exports = async (req, res, next) => {
       'name',
       'avatar',
       'points'
-    ])
+    ]);
     next()
   } catch (err) {
     res.status(400).send({
@@ -44,4 +44,4 @@ module.exports = async (req, res, next) => {
       message: err.message
     })
   }
-}
+};

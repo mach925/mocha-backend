@@ -1,9 +1,9 @@
-const express = require('express')
+const express = require('express');
 
-const route = express()
+const route = express();
 
-route.use(require('../../middleware/auth.middleware'))
+route.use(require('../../middleware/auth.middleware'));
 
-route.use('/auth', require('./auth'))
+route.use('/auth', require('./auth'));
 
 module.exports = route;

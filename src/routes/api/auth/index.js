@@ -1,8 +1,8 @@
-const express = require('express')
+const express = require('express');
 
-const route = express()
+const route = express();
 
-route.post('/send-sms', require('./send.sms'))
-route.post('/validate-sms', require('./validate.sms'))
+route.post('/send-sms', require('./send.sms'));
+route.post('/validate-sms', require('./validate.sms'));
 
-module.exports = route
+module.exports = route;
