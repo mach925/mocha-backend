@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     if (!phone_number || !code) {
       res.status(400).send({
         result: 'error',
-        message: 'Please provide code'
+        message: 'api.auth.code.none' //'Please provide code'
       })
       return next()
     }
@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
     if (!sms) {
       res.status(404).send({
         result: 'error',
-        message: 'Code expired'
+        message: 'api.auth.code.expired' //'Code expired'
       })
       return next()
     } else {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
       data: {
         user,
         token: generateToken(),
-        message: 'verification success'
+        message: 'api.auth.validation.success' //'verification success'
       }
     })
   } catch(err) {

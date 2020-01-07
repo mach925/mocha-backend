@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     if (!phone_number) {
       res.status(400).send({
         result: 'error',
-        message: 'Please provide phone number'
+        message: 'api.auth.phone.none' //'Please provide phone number'
       })
       return next()
     }
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     if (!message) {
       res.status(400).send({
         result: 'error',
-        message: 'Failed to send sms, please try again.'
+        message: 'api.auth.sms.failed' //'Failed to send sms, please try again.'
       })
     }
 
@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
     res.status(200).send({
       result: 'ok',
       data: {
-        message: `Verification code sent to ${phone_number} successfully expires in 5 minutes`,
+        message: 'api.auth.sms.success',// `Verification code sent to ${phone_number} successfully expires in 5 minutes`,
         expireTime: 5
       }
     })
