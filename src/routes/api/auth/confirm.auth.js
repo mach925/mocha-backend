@@ -1,6 +1,6 @@
 const { User } = require('../../../models/user.model');
 const { Sms } = require('../../../models/sms.model');
-const { generateToken } = require('../../../services/auth.service');
+const { AuthService } = require('../../../services');
 
 module.exports = async (req, res) => {
 
@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
 
     res.success({
       user,
-      token: generateToken(),
+      token: AuthService.generateToken(),
       message: 'api.auth.sms-request.success' //'verification success'
     });
   } catch(err) {

@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { User } = require('../models/user.model');
-const { verifyToken } = require('../services/auth.service');
+const { AuthService } = require('../services');
 
 const whitelist = {
   '/auth/send-sms': true,
@@ -21,7 +21,7 @@ module.exports = async (req, res, next) => {
     if (!token.startsWith('Bearer ')) {
       throw 'api.auth.token.type.invalid' // 'Invalid token type'
     }
-    const payload = verifyToken(token.substring(7))
+    const payload = AuthService.verifyToken(token.substring(7))
     if (payload == null) {
       throw 'api.auth.token.invalid' // 'Invalid token'
     }
