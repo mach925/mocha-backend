@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     // Validate parameters existence
     if (!phone_number || !code) {
       res.error({
-        message: 'api.auth.code.none' //'Please provide code'
+        message: 'api.auth.sms-validate.no-code' //'Please provide code'
       });
       return next();
     }
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     const sms = await Sms.findOne({ phone_number, code });
     if (!sms) {
       res.error({
-        message: 'api.auth.code.expired' //'Code expired'
+        message: 'api.auth.sms-validate.code-expired' //'Code expired'
       }, 404);
       return next();
     } else {
@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
     res.success({
       user,
       token: generateToken(),
-      message: 'api.auth.validation.success' //'verification success'
+      message: 'api.auth.sms-request.success' //'verification success'
     });
   } catch(err) {
     res.error({
