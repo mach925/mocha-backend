@@ -4,8 +4,8 @@ const { User } = require('../models/user.model');
 const { verifyToken } = require('../services/auth.service');
 
 const whitelist = {
-  '/auth/send-sms': true,
-  '/auth/validate-sms': true
+  '/auth/signup-confirm': true,
+  '/auth/signup-request': true
 };
 
 module.exports = async (req, res, next) => {
