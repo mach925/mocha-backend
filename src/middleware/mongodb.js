@@ -6,15 +6,15 @@
 const mongoose = require('mongoose');
 const config = require('../config/database.config');
 mongoose.connect(config.uri, config.option);
-
+const db = mongoose.connection
 console.log("DB config : ", config);
 
-mongoose.connection.on('error', (err) => {
+db.on('error', (err) => {
 	console.log(err);
-});
-
-mongoose.connection.on('disconnected', () => {
+})
+db.on('disconnected', () => {
 	console.log('Mongoose default connection disconnected');
-});
+})
+db.once('open', () => console.log('connected to databse'))
 
 module.exports = mongoose.connection;
