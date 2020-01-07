@@ -1,5 +1,6 @@
 const _ = require('lodash')
 
+const { User } = require('../models/user.model')
 const { verifyToken } = require('../services/auth')
 
 const whitelist = {
@@ -24,13 +25,17 @@ module.exports = async (req, res, next) => {
     if (payload == null) {
       throw 'Invalid token'
     }
-    const user = await User.findByPk(payload.id)
+    const user = await User.findOneById(payload.id)
     if (user == null) {
       throw 'Invalid token: user not found'
     }
     req.user = _.pick(user, [
       '_id',
-      'phone_number'
+      'phone',
+      'user_id',
+      'name',
+      'avatar',
+      'points'
     ])
     next()
   } catch (err) {
