@@ -19,4 +19,7 @@ app.use(cors({credentials:true, origin: true, optionsSuccessStatus: 200}));
 //   next();
 // });
 
+app.get('/', (req, res) => res.send('Mocha Backend'));
+app.use('/api', require('./routes/api'));
+
 module.exports = app;
