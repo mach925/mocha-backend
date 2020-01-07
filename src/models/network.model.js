@@ -29,7 +29,7 @@ class NetworkModel extends BaseModel {
         type: Array,
         required: true
       },
-      reflections: {
+      permissions: {
         type: Array,
         required: true
       },
