@@ -10,7 +10,7 @@ import { VULNERABILITIES } from './reflection.model';
 
 const  { Schema } = mongoose;
 
-class NetworkModel extends BaseModel {
+class TrustNetworkModel extends BaseModel {
 
   constructor() {
 
@@ -20,7 +20,7 @@ class NetworkModel extends BaseModel {
         type: Schema.Types.ObjectId,
         ref: 'User'
       },
-      title: {
+      name: {
         type: String,
         required: true,
         trim: true,
@@ -44,14 +44,14 @@ class NetworkModel extends BaseModel {
       }
     };
 
-    super( 'Network', schema );
+    super( 'TrustNetwork', schema );
   }
 }
 
-const networkModel = new NetworkModel();
+const trustNetworkModel = new TrustNetworkModel();
 
 Object.keys(VULNERABILITIES).map((key) => {
-  Object.defineProperty(networkModel, key, {
+  Object.defineProperty(trustNetworkModel, key, {
     value: VULNERABILITIES[key],
     writable: false,
     enumerable: true,
@@ -60,5 +60,5 @@ Object.keys(VULNERABILITIES).map((key) => {
 });
 
 module.exports = {
-  Network: networkModel
+  TrustNetwork: trustNetworkModel
 };
