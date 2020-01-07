@@ -1,3 +1,4 @@
+const { User } = require('../../../models/user.model')
 const { Sms } = require('../../../models/sms.model')
 const { generateToken } = require('../../../services/auth')
 
@@ -28,10 +29,14 @@ module.exports = async (req, res) => {
     }
 
     // TODO: Create user account
+    const user = await User.create({
+      phone: phone_number,
+    })
 
     res.status(200).send({
       result: 'ok',
       data: {
+        user,
         token: generateToken(),
         message: 'verification success'
       }
