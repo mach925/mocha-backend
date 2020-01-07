@@ -1,4 +1,5 @@
 const { Sms } = require('../../../models/sms.model');
+const { sms_expire_time } = require('../../../constants');
 
 module.exports = async (req, res) => {
 
@@ -7,8 +8,7 @@ module.exports = async (req, res) => {
   try {
     // Validate parameters existence
     if (!phone_number) {
-      res.status(400).send({
-        result: 'error',
+      res.error({
         message: 'api.auth.phone.none' //'Please provide phone number'
       });
       return next();
@@ -25,8 +25,7 @@ module.exports = async (req, res) => {
       to: phone_number
     });
     if (!message) {
-      res.status(400).send({
-        result: 'error',
+      res.error({
         message: 'api.auth.sms.failed' //'Failed to send sms, please try again.'
       });
     }
@@ -44,16 +43,12 @@ module.exports = async (req, res) => {
       });
     }
 
-    res.status(200).send({
-      result: 'ok',
-      data: {
-        message: 'api.auth.sms.success',// `Verification code sent to ${phone_number} successfully expires in 5 minutes`,
-        expireTime: 5
-      }
+    res.success({
+      message: 'api.auth.sms.success',// `Verification code sent to ${phone_number} successfully expires in 5 minutes`,
+      expireTime: sms_expire_time
     });
   } catch(err) {
-    res.status(400).send({
-      result: 'error',
+    res.error({
       message: err.message
     });
   }
