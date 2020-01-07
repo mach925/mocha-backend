@@ -2,7 +2,7 @@ const express = require('express');
 
 const route = express();
 
-route.post('/send-sms', require('./send.sms'));
-route.post('/validate-sms', require('./validate.sms'));
+route.post('/auth-request', require('./request.auth'));
+route.post('/auth-confirm', require('./confirm.auth'));
 
 module.exports = route;
