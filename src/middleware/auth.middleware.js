@@ -16,18 +16,18 @@ module.exports = async (req, res, next) => {
   try {
     const token = req.headers['authorization']
     if (token === null) {
-      throw 'No token provided'
+      throw 'api.auth.token.none' // 'No token provided'
     }
     if (!token.startsWith('Bearer ')) {
-      throw 'Invalid token type'
+      throw 'api.auth.token.type.invalid' // 'Invalid token type'
     }
     const payload = verifyToken(token.substring(7))
     if (payload == null) {
-      throw 'Invalid token'
+      throw 'api.auth.token.invalid' // 'Invalid token'
     }
     const user = await User.findOneById(payload.id)
     if (user == null) {
-      throw 'Invalid token: user not found'
+      throw 'api.auth.token.user.none' // 'Invalid token: user not found'
     }
     req.user = _.pick(user, [
       '_id',
