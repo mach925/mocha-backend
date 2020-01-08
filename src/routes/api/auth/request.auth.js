@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       from: process.env.TWILIO_SENDER_NUMBER,
       to: phone_number
     });
-    if (!message) {
+    if (message.status === 'failed') {
       res.error({
         message: 'api.auth.sms-request.failed' //'Failed to send sms, please try again.'
       });
