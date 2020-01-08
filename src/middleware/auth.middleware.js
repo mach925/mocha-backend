@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { User } = require('../models/user.model');
+const { ProfileService } = require('../services');
 const { AuthService } = require('../services');
 
 const whitelist = {
@@ -25,7 +25,8 @@ module.exports = async (req, res, next) => {
     if (payload == null) {
       throw 'api.auth.token.invalid' // 'Invalid token'
     }
-    const user = await User.findOneById(payload._id)
+
+    const user = await ProfileService.findProfileById(payload.id)
     if (user == null) {
       throw 'api.auth.token.user.none' // 'Invalid token: user not found'
     }
