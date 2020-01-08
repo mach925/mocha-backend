@@ -1,14 +1,14 @@
-const { User } = require('../../../models/user.model');
+const { ProfileService } = require('../../../services');
 const { Sms } = require('../../../models/sms.model');
-const { generateToken } = require('../../../services/auth.service');
+const { AuthService } = require('../../../services');
 
 module.exports = async (req, res) => {
 
-  const { phone_number, code } = req.body;
+  const { phone, code } = req.body;
 
   try {
     // Validate parameters existence
-    if (!phone_number || !code) {
+    if (!phone || !code) {
       res.error({
         message: 'api.auth.sms-validate.no-code' //'Please provide code'
       });
@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
     }
 
     // Compare user input code and sms saved to db
-    const sms = await Sms.findOne({ phone_number, code });
+    const sms = await Sms.findOne({ phone, code });
     if (!sms) {
       res.error({
         message: 'api.auth.sms-validate.code-expired' //'Code expired'
@@ -27,13 +27,13 @@ module.exports = async (req, res) => {
     }
 
     // TODO: Create user account
-    const user = await User.create({
-      phone: phone_number,
+    const user = await ProfileService.createProfile({
+      phone,
     });
 
     res.success({
       user,
-      token: generateToken(),
+      token: AuthService.generateToken(),
       message: 'api.auth.sms-request.success' //'verification success'
     });
   } catch(err) {

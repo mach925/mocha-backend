@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 
 function generateToken(user) {
-  const content = _.pick(user, ['id', 'phone_number']);
+  const content = _.pick(user, ['_id', 'phone']);
   return jwt.sign(content, process.env.JWT_MASTER_KEY);
 }
 
