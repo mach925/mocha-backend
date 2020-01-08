@@ -1,3 +1,3 @@
 module.exports = (req, res) => {
-  res.success(req.user);
+  res.success({ user: req.user });
 };
