@@ -3,11 +3,11 @@ const { sms_expire_time } = require('../../../constants');
 
 module.exports = async (req, res) => {
 
-  const { phone_number } = req.body;
+  const { phone } = req.body;
 
   try {
     // Validate parameters existence
-    if (!phone_number) {
+    if (!phone) {
       res.error({
         message: 'api.auth.sms-request.no-phone' //'Please provide phone number'
       });
@@ -16,13 +16,13 @@ module.exports = async (req, res) => {
 
     // Create random verification code - 6 digits
     const digits = Math.floor(100000 + Math.random() * 900000);
-
+    
     // Send sms message
     const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
     const message = await client.messages.create({
       body: `Mocha verification code: ${digits}`,
       from: process.env.TWILIO_SENDER_NUMBER,
-      to: phone_number
+      to: phone
     });
     if (!message) {
       res.error({
@@ -31,20 +31,20 @@ module.exports = async (req, res) => {
     }
 
     // Save sms object for validation
-    let oldSms = await Sms.findOne({ phone: phone_number });
+    let oldSms = await Sms.findOne({ phone });
     if (oldSms) {
       oldSms.code = digits;
       oldSms.expireAt = Date.now();
       await oldSms.save();
     } else {
       await Sms.create({
-        phone: phone_number,
+        phone,
         code: digits
       });
     }
 
     res.success({
-      message: 'api.auth.sms-request.success',// `Verification code sent to ${phone_number} successfully expires in 5 minutes`,
+      message: 'api.auth.sms-request.success',// `Verification code sent to ${phone} successfully expires in 5 minutes`,
       expireTime: sms_expire_time
     });
   } catch(err) {
