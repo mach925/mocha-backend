@@ -23,7 +23,7 @@ module.exports = async (req, res, next) => {
     }
     if (!token.startsWith('Bearer ')) {
       // Invalid token type
-      throw 'api.auth.token.type.invalid';
+      throw 'api.auth.token.type-invalid';
     }
     const payload = AuthService.verifyToken(token.substring(7));
     if (payload == null) {
@@ -35,7 +35,7 @@ module.exports = async (req, res, next) => {
     const user = await ProfileService.findProfileById(payload._id);
     if (user == null) {
       // Invalid token: user not found
-      throw 'api.auth.token.user.none';
+      throw 'api.auth.token.no-user';
     }
     req.user = _.pick(user, [
       '_id',
