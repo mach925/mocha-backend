@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
     }
 
     // Compare user input code and sms saved to db
-    const sms = await Sms.findOne({ phone_number, code });
+    const sms = await Sms.findOne({ phone: phone_number, code });
     if (!sms) {
       res.error({
         message: 'api.auth.sms-validate.code-expired' //'Code expired'

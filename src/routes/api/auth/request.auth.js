@@ -31,14 +31,14 @@ module.exports = async (req, res) => {
     }
 
     // Save sms object for validation
-    let oldSms = await Sms.findOne({ phone_number });
+    let oldSms = await Sms.findOne({ phone: phone_number });
     if (oldSms) {
       oldSms.code = digits;
       oldSms.expireAt = Date.now();
       await oldSms.save();
     } else {
       await Sms.create({
-        phone_number,
+        phone: phone_number,
         code: digits
       });
     }
