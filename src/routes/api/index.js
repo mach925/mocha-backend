@@ -7,5 +7,6 @@ route.use(require('../../middleware/auth.middleware'));
 
 route.use('/auth', require('./auth'));
 route.use('/reflection', require('./reflection'));
+route.use('/user', require('./user'));
 
 module.exports = route;
