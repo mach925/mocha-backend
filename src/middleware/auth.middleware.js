@@ -4,8 +4,8 @@ const { User } = require('../models/user.model');
 const { AuthService } = require('../services');
 
 const whitelist = {
-  '/auth/send-sms': true,
-  '/auth/validate-sms': true
+  '/auth/signup-confirm': true,
+  '/auth/signup-request': true
 };
 
 module.exports = async (req, res, next) => {
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     if (payload == null) {
       throw 'api.auth.token.invalid' // 'Invalid token'
     }
-    const user = await User.findOneById(payload.id)
+    const user = await User.findOneById(payload._id)
     if (user == null) {
       throw 'api.auth.token.user.none' // 'Invalid token: user not found'
     }
