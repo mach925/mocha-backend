@@ -1,4 +1,4 @@
-const { User } = require('../../../models/user.model');
+const { ProfileService } = require('../../../services');
 const { Sms } = require('../../../models/sms.model');
 const { generateToken } = require('../../../services/auth.service');
 
@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     }
 
     // TODO: Create user account
-    const user = await User.create({
+    const user = await ProfileService.createProfile({
       phone: phone_number,
     });
 
