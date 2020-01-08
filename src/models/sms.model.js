@@ -9,7 +9,7 @@ class SmsModel extends BaseModel {
   constructor() {
 
     const schema = {
-      phone_number: {
+      phone: {
         type: String,
         required: true,
         trim: true,
