@@ -25,7 +25,6 @@ import Errors from '../../constants/error.constant';
  * @@ story (String, optional)
  * @@ feelings (Object Array, optinal) 
  * @@ needs (Object Array, optional)
- * @@ today_count (Number, optional)
  * @@ week_count (Number, optional)
  * @@ tags (String Array, optional)
  * @@ vulnerability (Number, optional)
@@ -52,7 +51,6 @@ const createReflection = async ({...params}) => {
  		story,
  		feelings,
  		needs,
- 		today_count,
  		week_count,
  		tags,
  		vulnerability
@@ -81,7 +79,6 @@ const createReflection = async ({...params}) => {
 	 		story,
 	 		feelings,
 	 		needs,
-	 		today_count: today_count === undefined ? 0 : today_count,
 	 		week_count: week_count === undefined ? 0 : week_count,
 	 		tags,
 	 		vulnerability
@@ -237,7 +234,6 @@ const findSharedReflections = async ({...params}) => {
  * @@ story (String, optional)
  * @@ feelings (Object Array, optinal) 
  * @@ needs (Object Array, optional)
- * @@ today_count (Number, optional)
  * @@ week_count (Number, optional)
  * @@ tags (String Array, optional)
  * @@ vulnerability (Number, optional)
@@ -263,7 +259,6 @@ const updateReflectionById = async ({...params}) => {
  		story,
  		feelings,
  		needs,
- 		today_count,
  		week_count,
  		tags,
  		vulnerability
@@ -294,10 +289,6 @@ const updateReflectionById = async ({...params}) => {
 		reflection.story = story || reflection.story;
 		reflection.feelings = feelings || reflection.feelings;
 		reflection.needs = needs || reflection.needs;
-		reflection.today_count = 
-			today_count === undefined 
-				? reflection.today_count
-				: today_count;
 		reflection.week_count = 
 			week_count === undefined
 				? reflection.week_count
@@ -360,7 +351,6 @@ const resetTapCount = async (id) => {
 			type: Reflection.MODEL_TAP
 		}, {
 			$set: {
-				today_count: 0,
 				week_count: 0
 			}
 		});
