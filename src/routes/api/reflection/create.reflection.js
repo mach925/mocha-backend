@@ -2,13 +2,13 @@ const { ReflectionService } = require('../../../services');
 
 module.exports = async (req, res) => {
   try {
-    const reflection = await ReflectionService.updateReflectionById({ ...req.body, id: req.params.id });
+    const reflection = await ReflectionService.createReflection({ ...req.body });
     res.success({
       reflection
     });
   } catch(err) {
     res.error({
-      message: 'api.reflection.update.fail'
+      message: err.message//'api.reflection.create.fail'
     }, 500);
   }
 };
