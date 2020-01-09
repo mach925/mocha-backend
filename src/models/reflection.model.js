@@ -96,8 +96,7 @@ class ReflectionModel extends BaseModel {
       },
       vulnerability: {
         type: Number,
-        enum: VULNERABILITIES.values(),
-        required: true
+        enum: VULNERABILITIES.values()
       },
       type: {
         type: String,

@@ -98,7 +98,7 @@ const createReflection = async ({...params}) => {
  *
  * @ Required params
  * @@ id/_id (String, Requried) : User's DB id
- * @@ type (String, Requried) : reflection type
+ * @@ type (String, optional) : reflection type
  *
  * @ return List of Reflection Object
  *
@@ -111,11 +111,19 @@ const findAllUserReflections = async ({...params}) => {
 			type
 		} = params;
 
-		let reflections = await Reflection.find({
-			owner: _id || id,
-			type
-		});
+		let reflections; 
 
+		if (type) {
+			reflections = await Reflection.find({
+				owner: _id || id,
+				type
+			});
+		} else {
+			reflections = await Reflection.find({
+				owner: _id || id
+			});
+		}
+		
 		return reflections;
 	} catch(err) {
 		throw err;
