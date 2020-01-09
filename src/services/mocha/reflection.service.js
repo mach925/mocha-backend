@@ -98,7 +98,6 @@ const createReflection = async ({...params}) => {
  *
  * @ Required params
  * @@ id/_id (String, Requried) : User's DB id
- * @@ type (String, optional) : reflection type
  *
  * @ return List of Reflection Object
  *
@@ -107,22 +106,41 @@ const findAllUserReflections = async ({...params}) => {
 	try {
 		const {
 			_id,
+			id
+		} = params;
+
+		let reflections = await Reflection.find({
+			owner: _id || id
+		});
+		
+		return reflections;
+	} catch(err) {
+		throw err;
+	}
+};
+
+/*
+ * return all reflections of user for specific type,
+ *
+ * @ Required params
+ * @@ id/_id (String, Requried) : User's DB id
+ * @@ type (String, Requried) : reflection type
+ *
+ * @ return List of Reflection Object
+ *
+ */
+const findUserReflectionsByType = async ({...params}) => {
+	try {
+		const {
+			_id,
 			id,
 			type
 		} = params;
 
-		let reflections; 
-
-		if (type) {
-			reflections = await Reflection.find({
-				owner: _id || id,
-				type
-			});
-		} else {
-			reflections = await Reflection.find({
-				owner: _id || id
-			});
-		}
+		let reflections = await Reflection.find({
+			owner: _id || id,
+			type
+		});
 		
 		return reflections;
 	} catch(err) {
@@ -357,6 +375,7 @@ module.exports = {
 	createReflection,
 	deleteReflectionById,
 	findAllUserReflections,
+	findUserReflectionsByType,
 	findReflectionById,
 	findSharedReflections,
 	resetTapCount,
