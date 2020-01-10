@@ -48,7 +48,7 @@ module.exports = async (req, res, next) => {
   } catch (err) {
     res.status(400).send({
       result: 'error',
-      message: err.message
+      message: err
     });
   }
 };
