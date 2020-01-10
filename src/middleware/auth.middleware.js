@@ -31,7 +31,6 @@ module.exports = async (req, res, next) => {
       throw 'api.auth.token.invalid';
     }
 
-    console.log("payload", payload);
     const user = await ProfileService.findProfileById(payload._id);
     if (user == null) {
       // Invalid token: user not found
