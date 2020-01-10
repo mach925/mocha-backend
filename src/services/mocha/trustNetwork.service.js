@@ -11,7 +11,7 @@ import Errors from '../../constants/error.constant';
  * @@ _id/id (String, Required) : user's db id
  * @@ members (String Array, Required) : db ids of users to be included.
  * @@ title(String, Required) : title of trust network
- * @@ reflections (String Array, Required) : reference model types of reflection model
+ * @@ permissions (String Array, Required) : reference model types of reflection model
  * @@ tags (String Array, Required) : tags of trust network.
  * @@ vulnerability (Integer, Required) : vulnerability level of turst network. Reference reflection model.
  *
@@ -24,7 +24,7 @@ const createUserTrustNetwork = async ({...params}) => {
 		id,
 		members,
 		name,
-		reflections,
+		permissions,
 		tags,
 		vulnerability
 	} = params;
@@ -36,7 +36,7 @@ const createUserTrustNetwork = async ({...params}) => {
 			owner: ownerDbId,
 			members,
 			name,
-			reflections,
+			permissions,
 			tags,
 			vulnerability
 		});
@@ -127,7 +127,7 @@ const findTrustNetworkById = async (id) => {
  * @@ id/_id (String, Requried) : network's DB id
  * @@ members (String Array, Required) : db ids of users to be included.
  * @@ title(String, Required) : title of trust network
- * @@ reflections (String Array, Required) : reference model types of reflection model
+ * @@ permissions (String Array, Required) : reference model types of reflection model
  * @@ tags (String Array, Required) : tags of trust network.
  * @@ vulnerability (Integer, Required) : vulnerability level of turst network. Reference reflection model.
  *
@@ -141,7 +141,7 @@ const updateTrustNetworkById = async ({...params}) => {
 			_id,
 			members,
 			name,
-			reflections,
+			permissions,
 			tags,
 			vulnerability
 		} = params;
@@ -155,7 +155,7 @@ const updateTrustNetworkById = async ({...params}) => {
 
 		network.members = members || network.members;
 		network.name = title || network.name;
-		network.reflections = reflections || network.reflections;
+		network.permissions = permissions || network.permissions;
 		network.tags = tags || network.tags;
 		network.vulnerability = 
 			vulnerability === undefined 
