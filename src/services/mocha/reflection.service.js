@@ -1,7 +1,7 @@
 /*
  This file provides apis related with reflection.
 */
-import TrustNetworkService from './trusNetwork.service';
+import TrustNetworkService from './trustNetwork.service';
 import { Reflection } from '../../models/reflection.model';
 import Errors from '../../constants/error.constant';
 
@@ -18,15 +18,14 @@ import Errors from '../../constants/error.constant';
  */
 const createReflection = async ({...params}) => {
 	const {
-		id,
-		_id,
+		ownerId,
 		type,
 		data
 	} = params;
 
 	try {
-		let ownerDbId = Reflection.convertToDbId(_id || id);
-		
+		let ownerDbId = Reflection.convertToDbId(ownerId);
+
 		if (!ownerDbId)
 			throw new Error(Errors.PROFILE_NOT_FOUND);
 
@@ -35,7 +34,7 @@ const createReflection = async ({...params}) => {
 			type,
 			data
 		});
-		
+
 		return reflection;
 	} catch (err) {
 		throw err;
@@ -61,7 +60,7 @@ const findAllUserReflections = async ({...params}) => {
 		let reflections = await Reflection.find({
 			owner: _id || id
 		});
-		
+
 		return reflections;
 	} catch(err) {
 		throw err;
@@ -90,7 +89,7 @@ const findUserReflectionsByType = async ({...params}) => {
 			owner: _id || id,
 			type
 		});
-		
+
 		return reflections;
 	} catch(err) {
 		throw err;
@@ -125,14 +124,14 @@ const findReflectionById = async (id) => {
  *
  * @ Required params
  * @@ id (String : required)
- * 
+ *
  * @ return reflection Object
  *
  */
 const findSharedReflections = async ({...params}) => {
 	try {
 		const {
-			_id, 
+			_id,
 			id
 		} = params;
 
@@ -141,21 +140,21 @@ const findSharedReflections = async ({...params}) => {
 		const matches = {$or: []};
 		for (let network of networks) {
 			const match = {}
-			if (network.owner) 
+			if (network.owner)
 				match.owner = network.owner;
-			
+
 			if (
-				network.tags && 
+				network.tags &&
 				network.tags !== []
 			) {
-				
+
 				match['data.tags'] = { $in: network.tags.concat(null) };
 			}
 			if (
 				network.vulnerability !== undefined &&
 				network.vulnerability !== null
 			) {
-				
+
 				match['data.vulnerability'] = { $in: [null, network.vulnerability] };
 			}
 
@@ -198,7 +197,7 @@ const updateReflectionById = async ({...params}) => {
 		reflection.data = data || reflection.data;
 
 		await reflection.save();
-		
+
 		return reflection;
 	} catch (err) {
 		throw err;
@@ -220,7 +219,7 @@ const deleteReflectionById = async (id) => {
 			_id: id
 		});
 
-		if (!reflection) 
+		if (!reflection)
 			throw new Error(Errors.REFLECTION_NOT_FOUND);
 
 		await Reflection.deleteOne({
@@ -228,7 +227,7 @@ const deleteReflectionById = async (id) => {
 		});
 
 		return reflection;
-	} catch(err) { 
+	} catch(err) {
 		throw err;
 	}
 };
