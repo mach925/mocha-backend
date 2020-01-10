@@ -1,7 +1,9 @@
 const _ = require('lodash');
 
-const { ProfileService } = require('../services');
-const { AuthService } = require('../services');
+const {
+  AuthService,
+  ProfileService
+} = require('../services');
 
 const whitelist = {
   '/auth/signup-confirm': true,
@@ -10,25 +12,30 @@ const whitelist = {
 
 module.exports = async (req, res, next) => {
   if (whitelist[req.path] === true) {
-    return next()
+    return next();
   }
 
   try {
-    const token = req.headers['authorization']
+    const token = req.headers['authorization'];
     if (token === null) {
-      throw 'api.auth.token.none' // 'No token provided'
+      // No token provided
+      throw 'api.auth.token.none';
     }
     if (!token.startsWith('Bearer ')) {
-      throw 'api.auth.token.type.invalid' // 'Invalid token type'
+      // Invalid token type
+      throw 'api.auth.token.type-invalid';
     }
-    const payload = AuthService.verifyToken(token.substring(7))
+    const payload = AuthService.verifyToken(token.substring(7));
     if (payload == null) {
-      throw 'api.auth.token.invalid' // 'Invalid token'
+      // Invalid token
+      throw 'api.auth.token.invalid';
     }
 
-    const user = await ProfileService.findProfileById(payload.id)
+    console.log("payload", payload);
+    const user = await ProfileService.findProfileById(payload._id);
     if (user == null) {
-      throw 'api.auth.token.user.none' // 'Invalid token: user not found'
+      // Invalid token: user not found
+      throw 'api.auth.token.no-user';
     }
     req.user = _.pick(user, [
       '_id',
@@ -38,11 +45,11 @@ module.exports = async (req, res, next) => {
       'avatar',
       'points'
     ]);
-    next()
+    next();
   } catch (err) {
     res.status(400).send({
       result: 'error',
       message: err.message
-    })
+    });
   }
 };
