@@ -11,23 +11,7 @@ import Errors from '../../constants/error.constant';
  * @ Required params
  * @@ id/_id (String, required) - db id of user creating reflection
  * @@ type (String, required)
- * @@ title (String, optional)
- * @@ asset (String, optional)
- * @@ text (String, optional)
- * @@ phrase (String, optional)
- * @@ action (String, optional)
- * @@ learned (String, optional)
- * @@ members (String Array, optional)
- * @@ questions (String Array, optional)
- * @@ answers (String Array, optional)
- * @@ bywhen (ISO Date String, optional)
- * @@ measures (String Array, optional)
- * @@ story (String, optional)
- * @@ feelings (Object Array, optinal) 
- * @@ needs (Object Array, optional)
- * @@ week_count (Number, optional)
- * @@ tags (String Array, optional)
- * @@ vulnerability (Number, optional)
+ * @@ data (Object, required)
  *
  * @ return created Reflection Object
  *
@@ -37,23 +21,7 @@ const createReflection = async ({...params}) => {
 		id,
 		_id,
 		type,
- 		title,
- 		asset,
- 		text,
- 		phrase,
- 		action,
- 		learned,
- 		members,
- 		questions,
- 		answers,
- 		bywhen,
- 		measures,
- 		story,
- 		feelings,
- 		needs,
- 		week_count,
- 		tags,
- 		vulnerability
+		data
 	} = params;
 
 	try {
@@ -66,22 +34,7 @@ const createReflection = async ({...params}) => {
 			owner: ownerDbId,
 			type,
 	 		title,
-	 		asset,
-	 		text,
-	 		phrase,
-	 		action,
-	 		learned,
-	 		members,
-	 		questions,
-	 		answers,
-	 		bywhen : bywhen ? new Date(bywhen) : undefined,
-	 		measures,
-	 		story,
-	 		feelings,
-	 		needs,
-	 		week_count: week_count === undefined ? 0 : week_count,
-	 		tags,
-	 		vulnerability
+			data
 		});
 		
 		return reflection;
@@ -195,21 +148,24 @@ const findSharedReflections = async ({...params}) => {
 			if (
 				network.tags && 
 				network.tags !== []
-			)
-				match.tags = { $in: network.tags.concat(null) };
-
+			) {
+				
+				match['data.tags'] = { $in: network.tags.concat(null) };
+			}
 			if (
 				network.vulnerability !== undefined &&
 				network.vulnerability !== null
-			)
-				match.vulnerability = { $in: [null, network.vulnerability] };
+			) {
 				
+				match['data.vulnerability'] = { $in: [null, network.vulnerability] };
+			}
+
 			matches.$or.push(match);
 		};
 
 		const reflections = await Reflection.find(matches);
 
-		return reflection;
+		return reflections;
 	} catch(err) {
 		throw err;
 	}
@@ -220,23 +176,7 @@ const findSharedReflections = async ({...params}) => {
  *
  * @ Required params
  * @@ id/_id (String, required) - db id of reflection
- * @@ title (String, optional)
- * @@ asset (String, optional)
- * @@ text (String, optional)
- * @@ phrase (String, optional)
- * @@ action (String, optional)
- * @@ learned (String, optional)
- * @@ members (String Array, optional)
- * @@ questions (String Array, optional)
- * @@ answers (String Array, optional)
- * @@ bywhen (ISO Date String, optional)
- * @@ measures (String Array, optional)
- * @@ story (String, optional)
- * @@ feelings (Object Array, optinal) 
- * @@ needs (Object Array, optional)
- * @@ week_count (Number, optional)
- * @@ tags (String Array, optional)
- * @@ vulnerability (Number, optional)
+ * @@ data (Object, optional)
  *
  * @ return updated Reflection Object
  *
@@ -245,23 +185,7 @@ const updateReflectionById = async ({...params}) => {
 	const {
 		id,
 		_id,
- 		title,
- 		asset,
- 		text,
- 		phrase,
- 		action,
- 		learned,
- 		members,
- 		questions,
- 		answers,
- 		bywhen,
- 		measures,
- 		story,
- 		feelings,
- 		needs,
- 		week_count,
- 		tags,
- 		vulnerability
+		data
 	} = params;
 
 	try {
@@ -272,32 +196,7 @@ const updateReflectionById = async ({...params}) => {
 		if (!reflection)
 			throw new Error(Errors.REFLECTION_NOT_FOUND);
 
-		reflection.title = title || reflection.title;
-		reflection.asset = asset || reflection.asset;
-		reflection.text = text || reflection.text;
-		reflection.phrase = phrase || reflection.phrase;
-		reflection.action = action || reflection.action;
-		reflection.learned = learned || reflection.learned;
-		reflection.members = members || reflection.members;
-		reflection.questions = questions || reflection.questions;
-		reflection.answers = answers || reflection.answers;
-		reflection.bywhen = 
-			bywhen === undefined 
-				? reflection.bywhen 
-				: new Date(bywhen);
-		reflection.measures = measures || reflection.measures;
-		reflection.story = story || reflection.story;
-		reflection.feelings = feelings || reflection.feelings;
-		reflection.needs = needs || reflection.needs;
-		reflection.week_count = 
-			week_count === undefined
-				? reflection.week_count
-				: week_count;
-		reflection.tags = tags || reflection.tags;
-		reflection.vulnerability = 
-			vulnerability === undefined 
-				? reflection.vulnerability 
-				: vulnerability;
+		reflection.data = data || reflection.data;
 
 		await reflection.save();
 		
@@ -351,7 +250,7 @@ const resetTapCount = async (id) => {
 			type: Reflection.MODEL_TAP
 		}, {
 			$set: {
-				week_count: 0
+				'data.week_count': 0
 			}
 		});
 
