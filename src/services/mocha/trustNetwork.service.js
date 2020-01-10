@@ -153,7 +153,7 @@ const updateTrustNetworkById = async ({...params}) => {
 			throw new Error(Errors.NETWORK_NOT_FOUND);
 
 		network.members = members || network.members;
-		network.name = title || network.name;
+		network.name = name || network.name;
 		network.permissions = permissions || network.permissions;
 		network.tags = tags || network.tags;
 		network.vulnerability =
