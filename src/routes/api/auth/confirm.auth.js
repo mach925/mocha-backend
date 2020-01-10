@@ -28,10 +28,13 @@ module.exports = async (req, res) => {
       await sms.remove();
     }
 
-    // TODO: Create user account
-    const user = await ProfileService.createProfile({
-      phone,
-    });
+    // Get existing user, if not, create new one.
+    let user = await ProfileService.findProfileByPhone(phone);
+    if (!user) {
+      user = await ProfileService.createProfile({
+        phone,
+      });
+    }
 
     res.success({
       user,
