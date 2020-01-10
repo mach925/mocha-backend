@@ -20,8 +20,7 @@ import Errors from '../../constants/error.constant';
  */
 const createUserTrustNetwork = async ({...params}) => {
 	const {
-		_id,
-		id,
+		ownerId,
 		members,
 		name,
 		permissions,
@@ -30,8 +29,8 @@ const createUserTrustNetwork = async ({...params}) => {
 	} = params;
 
 	try {
-		const ownerDbId = TrustNetwork.convertToDbId(_id || id);
-		
+		const ownerDbId = TrustNetwork.convertToDbId(ownerId);
+
 		const network = await TrustNetwork.create({
 			owner: ownerDbId,
 			members,
@@ -40,7 +39,7 @@ const createUserTrustNetwork = async ({...params}) => {
 			tags,
 			vulnerability
 		});
-				
+
 		return network;
 	} catch (err) {
 		throw err;
@@ -85,7 +84,7 @@ const findAllUserTrustNetworks = async ({...params}) => {
 const findTrustNetworksIncludingUser = async (id) => {
 	try {
 		const userDbId = TrustNetwork.convertToDbId(id);
-		
+
 		if (!userDbId)
 			throw new Error(Errors.PROFILE_NOT_FOUND);
 
@@ -137,7 +136,7 @@ const findTrustNetworkById = async (id) => {
 const updateTrustNetworkById = async ({...params}) => {
 	try {
 		const {
-			id, 
+			id,
 			_id,
 			members,
 			name,
@@ -150,16 +149,16 @@ const updateTrustNetworkById = async ({...params}) => {
 			_id: id || _id
 		});
 
-		if (!network) 
+		if (!network)
 			throw new Error(Errors.NETWORK_NOT_FOUND);
 
 		network.members = members || network.members;
 		network.name = title || network.name;
 		network.permissions = permissions || network.permissions;
 		network.tags = tags || network.tags;
-		network.vulnerability = 
-			vulnerability === undefined 
-				? network.vulnerability 
+		network.vulnerability =
+			vulnerability === undefined
+				? network.vulnerability
 				: vulnerability;
 
 		await network.save();
@@ -185,7 +184,7 @@ const deleteTrustNetworkById = async (id) => {
 			_id: id
 		});
 
-		if (!network) 
+		if (!network)
 			throw new Error(Errors.NETWORK_NOT_FOUND);
 
 		await TrustNetwork.deleteOne({

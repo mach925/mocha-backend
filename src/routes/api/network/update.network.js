@@ -1,11 +1,14 @@
+const { TrustNetworkService } = require('../../../services');
+
 module.exports = async (req, res) => {
   try {
+    const network = await TrustNetworkService.updateTrustNetworkById({ ...req.body, id: req.params.id });
     res.success({
-      networks: []
+      network
     });
   } catch(err) {
     res.error({
-      message: 'api.user.update-profile.fail'
+      message: 'api.network.update.fail'
     }, 500);
   }
 };
