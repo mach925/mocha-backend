@@ -39,7 +39,7 @@ class TrustNetworkModel extends BaseModel {
       },
       vulnerability: {
         type: Number,
-        enum: VULNERABILITIES.values(),
+        enum: Object.values(VULNERABILITIES),
         required: true
       }
     };

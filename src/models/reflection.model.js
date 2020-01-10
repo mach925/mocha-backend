@@ -22,7 +22,7 @@ const models = {
 const VULNERABILITIES = {
   NOT_VULNERABLE: 1,
   SOMEWHAT_VULNERABLE: 2,
-  VERY_VULNERABLE: 3, 
+  VERY_VULNERABLE: 3,
   MOST_VULNERABLE: 4
 };
 
@@ -38,7 +38,7 @@ class ReflectionModel extends BaseModel {
       },
       type: {
         type: String,
-        enum: models.values(),
+        enum: Object.values(models),
         required: true,
       },
       data: {
