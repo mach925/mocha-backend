@@ -1,7 +1,7 @@
 /*
  This file provides apis related with reflection.
 */
-import TrustNetworkService from './trusNetwork.service';
+import TrustNetworkService from './trustNetwork.service';
 import { Reflection } from '../../models/reflection.model';
 import Errors from '../../constants/error.constant';
 
