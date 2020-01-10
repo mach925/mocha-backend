@@ -33,7 +33,6 @@ const createReflection = async ({...params}) => {
 		const reflection = await Reflection.create({
 			owner: ownerDbId,
 			type,
-	 		title,
 			data
 		});
 		
