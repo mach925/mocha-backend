@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -19,8 +18,5 @@ app.use(cors({credentials:true, origin: true, optionsSuccessStatus: 200}));
 //   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 //   next();
 // });
-
-app.get('/', (req, res) => res.send('Mocha Backend'));
-app.use('/api', require('./routes/api'));
 
 module.exports = app;
