@@ -36,73 +36,14 @@ class ReflectionModel extends BaseModel {
         type: Schema.Types.ObjectId,
         ref: 'User'
       },
-      title: {
-        type: String,
-        trim: true,
-      },
-      asset: {
-        type: String,
-        trim: true,
-      },
-      text: {
-        type: String,
-        trim: true
-      },
-      phrase: {
-        type: String,
-        trim: true
-      },
-      action: {
-        type: String,
-        trim: true
-      },
-      learned: {
-        type: String,
-        trim: true
-      },
-      members: {
-        type: Array
-      },
-      questions: {
-        type: Array
-      },
-      answers: {
-        type: Array
-      },
-      bywhen: {
-        type: Date
-      },
-      measures: {
-        type: Array
-      },
-      story: {
-        type: String,
-        trim: true
-      },
-      feelings: {
-        type: Array
-      },
-      needs: {
-        type: Array
-      },
-      today_count: {
-        type: Number
-      },
-      week_count: {
-        type: Number
-      },
-      tags: {
-        type: Array
-      },
-      vulnerability: {
-        type: Number,
-        enum: Object.values(VULNERABILITIES),
-        required: true
-      },
       type: {
         type: String,
         enum: Object.values(models),
         required: true,
+      },
+      data: {
+        type: Object,
+        trim: true,
       }
     };
 
