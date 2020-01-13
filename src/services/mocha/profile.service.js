@@ -204,6 +204,24 @@ const deleteProfile = async ({...params}) => {
 	}
 };
 
+/*
+ * find all users
+ *
+ * @ return User Lists / null
+ *
+ */
+const findAllUsers = async () => {
+	try {
+		let users;
+
+		users = await User.find();
+
+		return users;
+	} catch(err) {
+		throw err;
+	}
+};
+
 module.exports = {
 	createProfile,
 	deleteProfile,
@@ -212,4 +230,5 @@ module.exports = {
 	findProfileById,
 	findProfileByUserId,
 	updateProfile,
+	findAllUsers,
 };
