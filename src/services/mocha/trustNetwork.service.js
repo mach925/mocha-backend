@@ -10,7 +10,7 @@ import Errors from '../../constants/error.constant';
  * @ Required params
  * @@ _id/id (String, Required) : user's db id
  * @@ members (String Array, Required) : db ids of users to be included.
- * @@ title(String, Required) : title of trust network
+ * @@ name(String, Required) : name of trust network
  * @@ permissions (String Array, Required) : reference model types of reflection model
  * @@ tags (String Array, Required) : tags of trust network.
  * @@ vulnerability (Integer, Required) : vulnerability level of turst network. Reference reflection model.
@@ -125,7 +125,7 @@ const findTrustNetworkById = async (id) => {
  * @ Required params
  * @@ id/_id (String, Requried) : network's DB id
  * @@ members (String Array, Required) : db ids of users to be included.
- * @@ title(String, Required) : title of trust network
+ * @@ name(String, Required) : name of trust network
  * @@ permissions (String Array, Required) : reference model types of reflection model
  * @@ tags (String Array, Required) : tags of trust network.
  * @@ vulnerability (Integer, Required) : vulnerability level of turst network. Reference reflection model.

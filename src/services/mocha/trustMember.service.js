@@ -1,0 +1,129 @@
+/*
+ This file provides apis related with trust member.
+*/
+import ProfileService from './profile.service';
+import { TrustMember } from '../../models/trustMember.model';
+import Errors from '../../constants/error.constant';
+
+/*
+ * Sends request for trust member other user
+ *
+ * @ Required params
+ * @@ from - db id of user requesting trust member  : String
+ * @@ to - owner's phone, user_id, db id
+ *
+ * @ return created TrustMember Object
+ *
+ */
+const requestTrustMember = async ({...params}) => {
+	const {
+		from,
+		to
+	} = params;
+
+	try {
+		let joinerDbId = TrustMember.convertToDbId(from);
+		let ownerDbId = TrustMember.convertToDbId(to);
+		
+		if (!ownerDbId) {
+			const user = await ProfileService.findProfileByPhoneorUserId(to);
+			if (user) 
+				ownerDbId = user._id;
+		}
+
+		if (!ownerDbId || !joinerDbId) 
+			throw new Error(Errors.PROFILE_NOT_FOUND);
+
+		const trustMember = await TrustMember.create({
+			owner: ownerDbId,
+			joiner: joinerDbId,
+			status: TrustMember.STATE_PENDING
+		});
+		
+		return trustMember;
+	} catch (err) {
+		throw err;
+	}
+};
+
+/*
+ * Accepts request or add new trust member
+ *
+ * @ Required params
+ * @@ owner - db id of user accepting or adding trust member  : String
+ * @@ joiner - conacter's phone, user_id, db id
+ *
+ * @ return created TrustMember Object
+ *
+ */
+const acceptOrAddTrustMember = async ({...params}) => {
+	const {
+		owner,
+		joiner
+	} = params;
+
+	try {
+		let ownerDbId = TrustMember.convertToDbId(owner);
+		let joinerDbId = TrustMember.convertToDbId(joiner);
+		
+		if (!joinerDbId) {
+			const user = await ProfileService.findProfileByPhoneorUserId(joiner);
+			if (user) 
+				joinerDbId = user._id;
+		}
+
+		if (!ownerDbId || !joinerDbId) 
+			throw new Error(Errors.PROFILE_NOT_FOUND);
+
+		let trustMember = await TrustMember.findOne({owner: ownerDbId, joiner: joinerDbId});
+
+		if (trustMember) {
+			trustMember.status = TrustMember.STATE_APPROVED;
+			await trustMember.save();
+		} else {
+			trustMember = await TrustMember.create({
+				owner: ownerDbId,
+				joiner: joinerDbId,
+				status: TrustMember.STATE_APPROVED
+			});
+		}
+
+		return trustMember;
+	} catch (err) {
+		throw err;
+	}
+};
+
+/*
+ * returns all trust member of user,
+ *
+ * @ Required params
+ * @@ id/_id (String, Requried) : User's DB id
+ *
+ * @ return List of TrustMember Object
+ *
+ */
+const findAllUserTrustMembers = async ({...params}) => {
+	try {
+		const {
+			_id,
+			id,
+			status
+		} = params;
+
+		let trustMembers = await TrustMember.find({
+			owner: _id || id,
+			status: status
+		});
+
+		return trustMembers;
+	} catch(err) {
+		throw err;
+	}
+};
+
+module.exports = {
+	acceptOrAddTrustMember,
+	findAllUserTrustMembers,
+	requestTrustMember,
+};
