@@ -17,4 +17,4 @@ db.on('disconnected', () => {
 });
 db.once('open', () => console.log('connected to databse'));
 
-module.exports = mongoose.connection;
+module.exports = db;
