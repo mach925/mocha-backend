@@ -73,7 +73,7 @@ const addReflections = async (params) => {
 			}
 		}
 
-		return findAllUserReflections({_id: ownerId});
+		return findAllUserReflections({ _id: ownerId });
 	} catch (err) {
 		throw err;
 	}
@@ -262,7 +262,7 @@ const updateReflections = async ({...params}) => {
 		for (const value of data) {
 			await updateReflectionById({ id: value._id, data: value.data });
 		}
-		return findAllUserReflections({_id: ownerId});
+		return findAllUserReflections({ _id: ownerId });
 	} catch (err) {
 		throw err;
 	}
@@ -316,7 +316,7 @@ const deleteReflections = async (params) => {
 		for (const id of data) {
 			await deleteReflectionById(id);
 		}
-		return findAllUserReflections({_id: ownerId});
+		return findAllUserReflections({ _id: ownerId });
 	} catch(err) {
 		throw err;
 	}
