@@ -42,6 +42,44 @@ const createReflection = async ({...params}) => {
 };
 
 /*
+ * Add user's reflections
+ *
+ * @ Required params
+ * @@ ownerId (String, required) - db id of user creating reflection
+ * @@ data (Object, required)
+ *
+ * @ return array of reflections
+ *
+ */
+const addReflections = async (params) => {
+	const {
+		ownerId,
+		data
+	} = params;
+
+	try {
+		let ownerDbId = Reflection.convertToDbId(ownerId);
+
+		if (!ownerDbId)
+			throw new Error(Errors.PROFILE_NOT_FOUND);
+
+		for (const [type, values] of Object.entries(data)) {
+			for (const reflectionData of values) {
+				await createReflection({
+					ownerId: ownerDbId,
+					type: type.charAt(0).toUpperCase() + type.slice(1),
+					data: reflectionData
+				});
+			}
+		}
+
+		return findAllUserReflections({_id: ownerId});
+	} catch (err) {
+		throw err;
+	}
+};
+
+/*
  * return all reflections of user,
  *
  * @ Required params
@@ -205,6 +243,32 @@ const updateReflectionById = async ({...params}) => {
 };
 
 /*
+ * Update reflections
+ *
+ * @ Required params
+ * @@ ownerId (String) : ownerId got from token
+ * @@ data (Object, optional)
+ *
+ * @ return updated Reflection Object
+ *
+ */
+const updateReflections = async ({...params}) => {
+	const {
+		data,
+		ownerId
+	} = params;
+
+	try {
+		for (const value of data) {
+			await updateReflectionById({ id: value._id, data: value.data });
+		}
+		return findAllUserReflections({_id: ownerId});
+	} catch (err) {
+		throw err;
+	}
+};
+
+/*
  * delete reflection by reflection db id
  *
  * @ Required params
@@ -227,6 +291,32 @@ const deleteReflectionById = async (id) => {
 		});
 
 		return reflection;
+	} catch(err) {
+		throw err;
+	}
+};
+
+/*
+ * delete reflections
+ *
+ * @ Required params
+ * @@ ownerId (String) : ownerId got from token
+ * @@ data (Object, Requried) : array of reflection's DB id
+ *
+ * @ return deleted Reflection Object
+ *
+ */
+const deleteReflections = async (params) => {
+	const {
+		data,
+		ownerId
+	} = params;
+
+	try {
+		for (const id of data) {
+			await deleteReflectionById(id);
+		}
+		return findAllUserReflections({_id: ownerId});
 	} catch(err) {
 		throw err;
 	}
@@ -260,11 +350,14 @@ const resetTapCount = async (id) => {
 
 module.exports = {
 	createReflection,
+	addReflections,
 	deleteReflectionById,
+	deleteReflections,
 	findAllUserReflections,
 	findUserReflectionsByType,
 	findReflectionById,
 	findSharedReflections,
 	resetTapCount,
-	updateReflectionById
+	updateReflectionById,
+	updateReflections
 };
