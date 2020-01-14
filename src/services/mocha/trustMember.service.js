@@ -2,7 +2,7 @@
  This file provides apis related with trust member.
 */
 import ProfileService from './profile.service';
-import { TrustMember } from '../../models/trustMember.model';
+import { TrustMember, STATES } from '../../models/trustMember.model';
 import Errors from '../../constants/error.constant';
 
 /*
@@ -37,7 +37,7 @@ const requestTrustMember = async ({...params}) => {
 		const trustMember = await TrustMember.create({
 			owner: ownerDbId,
 			joiner: joinerDbId,
-			status: TrustMember.STATE_PENDING
+			status: STATES.STATE_PENDING
 		});
 		
 		return trustMember;
@@ -78,13 +78,13 @@ const acceptOrAddTrustMember = async ({...params}) => {
 		let trustMember = await TrustMember.findOne({owner: ownerDbId, joiner: joinerDbId});
 
 		if (trustMember) {
-			trustMember.status = TrustMember.STATE_APPROVED;
+			trustMember.status = STATES.STATE_APPROVED;
 			await trustMember.save();
 		} else {
 			trustMember = await TrustMember.create({
 				owner: ownerDbId,
 				joiner: joinerDbId,
-				status: TrustMember.STATE_APPROVED
+				status: STATES.STATE_APPROVED
 			});
 		}
 

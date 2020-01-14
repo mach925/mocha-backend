@@ -31,7 +31,7 @@ class TrustMemberModel extends BaseModel {
       },
       status: {
         type: Number,
-        enum: states.values()
+        enum: Object.values(states)
       }
     };
 
@@ -51,5 +51,6 @@ Object.keys(states).map((stateKey) => {
 });
 
 module.exports = {
-  TrustMember: trustMemberModel
+  TrustMember: trustMemberModel,
+  STATES: states
 };
