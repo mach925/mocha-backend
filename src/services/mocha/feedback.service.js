@@ -103,46 +103,46 @@ const findfeedbackByRequestId = async (id) => {
 };
 
 /*
- * find Feedback by requester id,
+ * find Feedbacks by requester id,
  *
  * @ Required params
  * @@ id (String : Required)
  *
- * @ return Feedback Object / null
+ * @ return List of Feedback Object / null
  *
  */
 const findfeedbackByRequester = async (id) => {
 	try {
-		let feedback;
+		let feedbacks;
 
-		feedback = await Feedback.findOne({
+		feedbacks = await Feedback.find({
 			requester: id				
 		});
 
-		return feedback;
+		return feedbacks;
 	} catch(err) {
 		throw err;
 	}
 };
 
 /*
- * find Feedback by sender id,
+ * find Feedbacks by sender id,
  *
  * @ Required params
  * @@ id (String : Required)
  *
- * @ return Feedback Object / null
+ * @ return List of Feedback Object / null
  *
  */
 const findfeedbackBySender = async (id) => {
 	try {
-		let feedback;
+		let feedbacks;
 
-		feedback = await Feedback.findOne({
+		feedbacks = await Feedback.find({
 			sender: id				
 		});
 
-		return feedback;
+		return feedbacks;
 	} catch(err) {
 		throw err;
 	}
