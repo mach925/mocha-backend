@@ -10,6 +10,6 @@ module.exports = async (req, res) => {
   } catch(err) {
     res.error({
       message: 'api.healthcheck.fail'
-    }, 500);
+    });
   }
 };

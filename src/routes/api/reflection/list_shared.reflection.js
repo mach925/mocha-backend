@@ -9,6 +9,6 @@ module.exports = async (req, res) => {
   } catch(err) {
     res.error({
       message: 'api.reflection.get-shared-list.fail'
-    }, 500);
+    });
   }
 };

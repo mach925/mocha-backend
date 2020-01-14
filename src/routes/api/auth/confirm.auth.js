@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     if (!sms) {
       res.error({
         message: 'api.auth.sms-validate.code-expired' //'Code expired'
-      }, 404);
+      });
       return next();
     } else {
       await sms.remove();

@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     });
   } catch(err) {
     res.error({
-      message: err.message //'api.reflection.add-array.fail'
-    }, 500);
+      message: 'api.reflection.add-array.fail'
+    });
   }
 };

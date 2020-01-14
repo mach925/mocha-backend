@@ -16,6 +16,6 @@ module.exports = async (req, res) => {
   } catch(err) {
     res.error({
       message: 'api.reflection.get-list.fail'
-    }, 500);
+    });
   }
 };
