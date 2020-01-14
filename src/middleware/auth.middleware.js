@@ -7,7 +7,8 @@ const {
 
 const whitelist = {
   '/auth/signup-confirm': true,
-  '/auth/signup-request': true
+  '/auth/signup-request': true,
+  '/health-check': true
 };
 
 module.exports = async (req, res, next) => {

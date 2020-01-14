@@ -10,4 +10,6 @@ route.use('/user', require('./user'));
 route.use('/network', require('./network'));
 route.use('/reflection', require('./reflection'));
 
+route.get('/health-check', require('./health.check'));
+
 module.exports = route;

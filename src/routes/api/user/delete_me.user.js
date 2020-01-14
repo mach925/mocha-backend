@@ -9,6 +9,6 @@ module.exports = async (req, res) => {
   } catch(err) {
     res.error({
       message: 'api.user.delete-profile.fail'
-    }, 500);
+    });
   }
 };

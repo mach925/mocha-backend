@@ -2,13 +2,13 @@ const { ReflectionService } = require('../../../services');
 
 module.exports = async (req, res) => {
   try {
-    const reflections = await ReflectionService.findSharedReflections({ id: req.user._id });
+    const reflections = await ReflectionService.updateReflections({ ...req.body, ownerId: req.user._id });
     res.success({
       reflections
     });
   } catch(err) {
     res.error({
-      message: 'api.reflection.get-shared-list.fail'
+      message: 'api.reflection.update-array.fail'
     });
   }
 };

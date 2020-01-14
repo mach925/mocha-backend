@@ -31,7 +31,7 @@ export default class BaseModel {
     if(indexes){
       this.schema.index(indexes);
     }
-    
+
     this.schema.pre( 'create',          this.createMiddleware );
     this.schema.pre( 'insertMany',      this.createMiddleware );
     this.schema.pre( 'save',            this.createMiddleware );
@@ -52,6 +52,10 @@ export default class BaseModel {
 
   async deleteOne( params ) {
     return this.model.deleteOne( params );
+  }
+
+  async deleteMany( params ) {
+    return this.model.deleteMany({'_id': {$in: params}}, {multi: true});
   }
 
   async find( params ) {
@@ -80,6 +84,20 @@ export default class BaseModel {
 
   async updateMany( query, update ){
     return this.model.updateMany(query, update);
+  }
+
+  async updateDocuments(data) {
+    return this.model.bulkWrite(data.map((obj) => {
+      const { _id, data } = obj;
+      return {
+        updateOne: {
+          filter: { _id: _id },
+          update: {
+            $set: { data }
+          }
+        }
+      }
+    }));
   }
 
   async updateById( params ) {

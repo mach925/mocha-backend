@@ -9,6 +9,6 @@ module.exports = async (req, res) => {
   } catch(err) {
     res.error({
       message: 'api.reflection.create.fail'
-    }, 500);
+    });
   }
 };
