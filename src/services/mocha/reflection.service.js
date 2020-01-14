@@ -1,6 +1,7 @@
 /*
  This file provides apis related with reflection.
 */
+const _ = require('lodash');
 import TrustNetworkService from './trustNetwork.service';
 import { Reflection } from '../../models/reflection.model';
 import Errors from '../../constants/error.constant';
@@ -63,15 +64,20 @@ const addReflections = async (params) => {
 		if (!ownerDbId)
 			throw new Error(Errors.PROFILE_NOT_FOUND);
 
-		for (const [type, values] of Object.entries(data)) {
-			for (const reflectionData of values) {
-				await createReflection({
-					ownerId: ownerDbId,
-					type: type.charAt(0).toUpperCase() + type.slice(1),
-					data: reflectionData
+		let reflections = [];
+		_.forEach(data, function(value, key) {
+			_.forEach(value, function(reflectionData) {
+				let now = _.now();
+				reflections.push({
+					owner: ownerDbId,
+					type: key.charAt(0).toUpperCase() + key.slice(1),
+					data: reflectionData,
+					created: now,
+					updated: now
 				});
-			}
-		}
+			})
+		});
+		await Reflection.insertMany(reflections);
 
 		return findAllUserReflections({ _id: ownerId });
 	} catch (err) {
@@ -259,9 +265,7 @@ const updateReflections = async ({...params}) => {
 	} = params;
 
 	try {
-		for (const value of data) {
-			await updateReflectionById({ id: value._id, data: value.data });
-		}
+		await Reflection.updateDocuments(data);
 		return findAllUserReflections({ _id: ownerId });
 	} catch (err) {
 		throw err;
@@ -313,9 +317,7 @@ const deleteReflections = async (params) => {
 	} = params;
 
 	try {
-		for (const id of data) {
-			await deleteReflectionById(id);
-		}
+		await Reflection.deleteMany(data);
 		return findAllUserReflections({ _id: ownerId });
 	} catch(err) {
 		throw err;
