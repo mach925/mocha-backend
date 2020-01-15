@@ -256,7 +256,9 @@ const updateFeedback = async ({...params}) => {
 		if(!dbFeedback)
 				throw new Error(Errors.FEEDBACK_NOT_FOUND);
 
-		dbFeedback.feedback = feedback || dbFeedback.feedback;
+		dbFeedback.pending = feedback.pending || dbFeedback.pending;
+		dbFeedback.question = feedback.question || dbFeedback.question;
+		dbFeedback.feedback = feedback.feedback || dbFeedback.feedback;
 
 		await dbFeedback.save();
 
