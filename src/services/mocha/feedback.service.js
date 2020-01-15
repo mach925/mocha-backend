@@ -2,6 +2,7 @@
  This file provides apis related with Feedback.
 */
 const _ = require('lodash');
+import { ReflectionService } from './reflection.service';
 import { Reflection } from '../../models/reflection.model';
 import { Feedback } from '../../models/feedback.model';
 import Errors from '../../constants/error.constant';
@@ -311,6 +312,7 @@ const deleteFeedback = async ({...params}) => {
 const deleteFeedbacksByGroupId = async (groupId) => {
 	try {
 		await Feedback.deleteManyByQuery({ groupId });
+		await ReflectionService.deleteReflectionById(groupId);
 	} catch(err) {
 		throw err;
 	}
