@@ -210,6 +210,27 @@ const findfeedbackBySender = async (id) => {
 };
 
 /*
+ * Get all feedbacks related with user
+ *
+ * @ Required params
+ * @@ id (String : Required) - User DB id
+ *
+ * @ return Feedback Array
+ *
+ */
+const findFeedbacks = async (id) => {
+	try {
+		let feedbacks = await Feedback.find({
+			$or: [{sender: id}, {receiver: id}]
+		});
+
+		return feedbacks;
+	} catch(err) {
+		throw err;
+	}
+};
+
+/*
  * Update new Feedback by id/_id,
  *
  * @ Required params
@@ -286,5 +307,6 @@ module.exports = {
 	findfeedbackByRequester,
 	findfeedbackByRequestId,
 	findfeedbackById,
+	findFeedbacks,
 	deleteFeedback
 };
