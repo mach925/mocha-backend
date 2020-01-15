@@ -311,8 +311,6 @@ const deleteFeedback = async ({...params}) => {
 const deleteFeedbacksByGroupId = async (groupId) => {
 	try {
 		await Feedback.deleteManyByQuery({ groupId });
-
-		return true;
 	} catch(err) {
 		throw err;
 	}
