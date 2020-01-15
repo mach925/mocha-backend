@@ -299,6 +299,25 @@ const deleteFeedback = async ({...params}) => {
 	}
 };
 
+/*
+ * Delete Feedbacks by groupId
+ *
+ * @ Required params
+ * @@ id/_id (String : Required)
+ *
+ * @ return Feedback Object
+ *
+ */
+const deleteFeedbacksByGroupId = async (groupId) => {
+	try {
+		await Feedback.deleteManyByQuery({ groupId });
+
+		return true;
+	} catch(err) {
+		throw err;
+	}
+};
+
 module.exports = {
 	createFeedback,
 	createFeedbacks,
@@ -308,5 +327,6 @@ module.exports = {
 	findfeedbackByRequestId,
 	findfeedbackById,
 	findFeedbacks,
-	deleteFeedback
+	deleteFeedback,
+	deleteFeedbacksByGroupId
 };

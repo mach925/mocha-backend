@@ -58,6 +58,10 @@ export default class BaseModel {
     return this.model.deleteMany({'_id': {$in: params}}, {multi: true});
   }
 
+  async deleteManyByQuery( query ) {
+    return this.model.deleteMany(query, {multi: true});
+  }
+
   async find( params ) {
     return this.model.find( params );
   }
