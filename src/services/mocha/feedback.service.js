@@ -190,9 +190,20 @@ const deleteFeedback = async ({...params}) => {
  * @ return Feedback Object
  *
  */
-const deleteFeedbacksByGroupId = async (groupId) => {
+const deleteFeedbacksByGroupId = async (params) => {
+	const {
+		receiver,
+		groupId
+	} = params;
+
 	try {
-		await Feedback.deleteManyByQuery({ groupId });
+		let query = { groupId };
+		if (receiver) {
+			const receiverDbId = Feedback.convertToDbId(receiver);
+			query.receiver = receiverDbId;
+		}
+
+		await Feedback.deleteManyByQuery(query);
 
 		// delete related reflection
 		let reflection = await Reflection.findOne({
