@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
     res.success({
       user,
       token: AuthService.generateToken(user),
-      message: 'api.auth.sms-request.success' //'verification success'
+      message: 'api.auth.sms-confirm.success' //'verification success'
     });
   } catch(err) {
     res.error({
