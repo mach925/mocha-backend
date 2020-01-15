@@ -27,7 +27,7 @@ class FeedbackModel extends BaseModel {
       pending: {
         type: Boolean,
         required: true,
-        default: false
+        default: true
       },
       question: {
         type: String,
@@ -39,7 +39,7 @@ class FeedbackModel extends BaseModel {
         required: true,
         trim: true
       },
-      groupID: {
+      groupId: {
         type: Schema.Types.ObjectId,
         ref: 'Reflection',
         required: true
