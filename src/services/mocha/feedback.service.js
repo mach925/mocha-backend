@@ -10,57 +10,6 @@ import Errors from '../../constants/error.constant';
  * Create new Feedback
  *
  * @ Required params
- * @@ request_id (String : Required) - Reflection DB id
- * @@ requester (String : Required) - User DB id
- * @@ sender (String : Required) - User DB id
- * @@ feedback (String : Required)
- *
- * @ return created Feedback Object
- *
- */
-const createFeedback = async ({...params}) => {
-	const {
-		request_id,
-		requester,
-		sender,
-		feedback
-	} = params;
-
-	try {
-		let requestDbId = Feedback.convertToDbId(request_id);
-
-		if (!requestDbId)
-			throw new Error(Errors.REFLECTION_NOT_FOUND);
-
-		let requesterDbId = Feedback.convertToDbId(requester);
-
-		if (!requesterDbId)
-			throw new Error(Errors.PROFILE_NOT_FOUND);
-
-		let senderDbId = Feedback.convertToDbId(sender);
-
-		if (!senderDbId)
-			throw new Error(Errors.PROFILE_NOT_FOUND);
-
-		const feedback_doc = await Feedback.create({
-			request_id,
-			requesterDbId,
-			senderDbId,
-			feedback
-		});
-
-		// To do : Cache Feedback info
-
-		return feedback_doc;
-	} catch (err) {
-		throw err;
-	}
-};
-
-/*
- * Create new Feedback
- *
- * @ Required params
  * @@ receivers (Array : Required) - Array of Receivers
  * @@ sender (User : Required) - Me
  * @@ questions (Array : Required) - Array of questions
@@ -135,75 +84,6 @@ const findfeedbackById = async (id) => {
 		}
 
 		return feedback;
-	} catch(err) {
-		throw err;
-	}
-};
-
-/*
- * find Feedback by Refelction db id,
- *
- * @ Required params
- * @@ id (String : Required)
- *
- * @ return Feedback Object / null
- *
- */
-const findfeedbackByRequestId = async (id) => {
-	try {
-		let feedback;
-
-		feedback = await Feedback.findOne({
-			request_id: id
-		});
-
-		return feedback;
-	} catch(err) {
-		throw err;
-	}
-};
-
-/*
- * find Feedbacks by requester id,
- *
- * @ Required params
- * @@ id (String : Required)
- *
- * @ return List of Feedback Object / null
- *
- */
-const findfeedbackByRequester = async (id) => {
-	try {
-		let feedbacks;
-
-		feedbacks = await Feedback.find({
-			requester: id
-		});
-
-		return feedbacks;
-	} catch(err) {
-		throw err;
-	}
-};
-
-/*
- * find Feedbacks by sender id,
- *
- * @ Required params
- * @@ id (String : Required)
- *
- * @ return List of Feedback Object / null
- *
- */
-const findfeedbackBySender = async (id) => {
-	try {
-		let feedbacks;
-
-		feedbacks = await Feedback.find({
-			sender: id
-		});
-
-		return feedbacks;
 	} catch(err) {
 		throw err;
 	}
@@ -331,12 +211,8 @@ const deleteFeedbacksByGroupId = async (groupId) => {
 };
 
 module.exports = {
-	createFeedback,
 	createFeedbacks,
 	updateFeedback,
-	findfeedbackBySender,
-	findfeedbackByRequester,
-	findfeedbackByRequestId,
 	findfeedbackById,
 	findFeedbacks,
 	deleteFeedback,
