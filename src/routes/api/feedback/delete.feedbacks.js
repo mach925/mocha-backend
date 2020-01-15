@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
     res.success();
   } catch(err) {
     res.error({
-      message: 'api.feedback.update.fail'
+      message: 'api.feedback.delete.fail'
     });
   }
 };
