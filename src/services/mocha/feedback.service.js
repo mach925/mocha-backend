@@ -100,9 +100,62 @@ const findfeedbackById = async (id) => {
  */
 const findFeedbacks = async (id) => {
 	try {
-		let feedbacks = await Feedback.find({
-			$or: [{sender: id}, {receiver: id}]
-		});
+		let feedbacks = await Feedback.aggregate([
+			{
+				$match:	{
+					$or: [{sender: id}, {receiver: id}]
+				}
+			},
+			{
+				$lookup: {
+				from: 'users',
+				localField: 'sender',
+				foreignField: '_id',
+				as: 'senderInfo'
+				}
+			},
+			{
+				$lookup: {
+				from: 'users',
+				localField: 'receiver',
+				foreignField: '_id',
+				as: 'receiverInfo'
+				}
+			},
+			{
+				$unwind: {
+					path: '$senderInfo',
+					preserveNullAndEmptyArrays: true
+				}
+			},
+			{
+				$unwind: {
+					path: '$receiverInfo',
+					preserveNullAndEmptyArrays: true
+				}
+			},
+			{
+				$project: {
+					pending: '$pending',
+					_id: '$_id',
+					sender: {
+						_id: '$senderInfo._id',
+						name: '$senderInfo.name',
+						avatar: '$senderInfo.avatar'
+					},
+					receiver: {
+						_id: '$receiverInfo._id',
+						name: '$receiverInfo.name',
+						avatar: '$receiverInfo.profile.avatar'
+					},
+					question: '$question',
+					feedback: '$feedback',
+					groupId: '$groupId',
+					created: '$created',
+					updated: '$updated'
+				}
+			}
+		]);
 
 		return feedbacks;
 	} catch(err) {
