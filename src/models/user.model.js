@@ -36,6 +36,10 @@ class UserModel extends BaseModel {
       },
       points: {
         type: Number
+      },
+      pushToken: {
+        type: String,
+        trim: true
       }
     };
 
