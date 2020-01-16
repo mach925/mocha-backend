@@ -37,14 +37,7 @@ module.exports = async (req, res, next) => {
       // Invalid token: user not found
       throw 'api.auth.token.no-user';
     }
-    req.user = _.pick(user, [
-      '_id',
-      'phone',
-      'user_id',
-      'name',
-      'avatar',
-      'points'
-    ]);
+    req.user = user;
     next();
   } catch (err) {
     res.status(400).send({
