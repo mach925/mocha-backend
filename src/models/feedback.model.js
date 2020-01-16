@@ -14,25 +14,35 @@ class FeedbackModel extends BaseModel {
   constructor() {
 
     const schema = {
-      request_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Reflection',
-        requried: true
-      },
-      requester: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        requried: true
-      },
       sender: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        requried: true
+        required: true
+      },
+      receiver: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      pending: {
+        type: Boolean,
+        required: true,
+        default: true
+      },
+      question: {
+        type: String,
+        required: true,
+        trim: true
       },
       feedback: {
         type: String,
         required: true,
         trim: true
+      },
+      groupId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Reflection',
+        required: true
       }
     };
 

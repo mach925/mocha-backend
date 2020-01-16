@@ -1,6 +1,8 @@
 /*
  This file provides apis related with Feedback.
 */
+const _ = require('lodash');
+import { Reflection } from '../../models/reflection.model';
 import { Feedback } from '../../models/feedback.model';
 import Errors from '../../constants/error.constant';
 
@@ -8,48 +10,56 @@ import Errors from '../../constants/error.constant';
  * Create new Feedback
  *
  * @ Required params
- * @@ request_id (String : Required) - Reflection DB id
- * @@ requester (String : Required) - User DB id
- * @@ sender (String : Required) - User DB id
- * @@ feedback (String : Required)
- * 
- * @ return created Feedback Object
+ * @@ receivers (Array : Required) - Array of Receivers
+ * @@ sender (User : Required) - Me
+ * @@ questions (Array : Required) - Array of questions
+ *
+ * @ return created Feedbacks Object
  *
  */
-const createFeedback = async ({...params}) => {
+const createFeedbacks = async ({...params}) => {
 	const {
-		request_id,
-		requester, 			
-		sender, 				
-		feedback
+		receivers,
+		sender,
+		questions
 	} = params;
 
 	try {
-		let requestDbId = Feedback.convertToDbId(request_id);
-	
-		if (!requestDbId)
-			throw new Error(Errors.REFLECTION_NOT_FOUND);
-
-		let requesterDbId = Feedback.convertToDbId(requester);
-	
-		if (!requesterDbId)
-			throw new Error(Errors.PROFILE_NOT_FOUND);
-
-		let senderDbId = Feedback.convertToDbId(sender);
-
+		let senderDbId = Reflection.convertToDbId(sender._id);
 		if (!senderDbId)
 			throw new Error(Errors.PROFILE_NOT_FOUND);
 
-		const feedback_doc = await Feedback.create({
-			request_id,
-			requesterDbId, 			
-			senderDbId, 				
-			feedback
+		const reflection = await Reflection.create({
+			owner: senderDbId,
+			type: "Feedback"
+		});
+		let reflectionDbId = Reflection.convertToDbId(reflection._id);
+
+		let feedbacks = [];
+		let now = _.now();
+
+		_.forEach(receivers, function(receiver) {
+			let receiverDbId = Feedback.convertToDbId(receiver._id);
+			if (!receiverDbId)
+				throw new Error(Errors.PROFILE_NOT_FOUND);
+
+			_.forEach(questions, function(question) {
+				feedbacks.push({
+					sender: senderDbId,
+					receiver: receiverDbId,
+					pending: true,
+					question,
+					feedback: '',
+					groupId: reflectionDbId,
+					created: now,
+					updated: now
+				});
+			})
 		});
 
-		// To do : Cache Feedback info
+		await Feedback.insertMany(feedbacks);
 
-		return feedback_doc;
+		return true;
 	} catch (err) {
 		throw err;
 	}
@@ -80,66 +90,18 @@ const findfeedbackById = async (id) => {
 };
 
 /*
- * find Feedback by Refelction db id,
+ * Get all feedbacks related with user
  *
  * @ Required params
- * @@ id (String : Required)
+ * @@ id (String : Required) - User DB id
  *
- * @ return Feedback Object / null
- *
- */
-const findfeedbackByRequestId = async (id) => {
-	try {
-		let feedback;
-
-		feedback = await Feedback.findOne({
-			request_id: id				
-		});
-
-		return feedback;
-	} catch(err) {
-		throw err;
-	}
-};
-
-/*
- * find Feedbacks by requester id,
- *
- * @ Required params
- * @@ id (String : Required)
- *
- * @ return List of Feedback Object / null
+ * @ return Feedback Array
  *
  */
-const findfeedbackByRequester = async (id) => {
+const findFeedbacks = async (id) => {
 	try {
-		let feedbacks;
-
-		feedbacks = await Feedback.find({
-			requester: id				
-		});
-
-		return feedbacks;
-	} catch(err) {
-		throw err;
-	}
-};
-
-/*
- * find Feedbacks by sender id,
- *
- * @ Required params
- * @@ id (String : Required)
- *
- * @ return List of Feedback Object / null
- *
- */
-const findfeedbackBySender = async (id) => {
-	try {
-		let feedbacks;
-
-		feedbacks = await Feedback.find({
-			sender: id				
+		let feedbacks = await Feedback.find({
+			$or: [{sender: id}, {receiver: id}]
 		});
 
 		return feedbacks;
@@ -168,18 +130,20 @@ const updateFeedback = async ({...params}) => {
 	} = params;
 
 	try {
-		let feedback = await Feedback.findOneById(_id || id);
+		let dbFeedback = await Feedback.findOneById(_id || id);
 
-		if(!feedback)
+		if(!dbFeedback)
 				throw new Error(Errors.FEEDBACK_NOT_FOUND);
 
-		feedback.feedback = feedback || feedback.feedback;
+		dbFeedback.pending = feedback.pending || dbFeedback.pending;
+		dbFeedback.question = feedback.question || dbFeedback.question;
+		dbFeedback.feedback = feedback.feedback || dbFeedback.feedback;
 
-		await feedback.save();
+		await dbFeedback.save();
 
 		// To do : Update cache
 
-		return feedback;
+		return dbFeedback;
 	} catch(err) {
 		throw err;
 	}
@@ -217,12 +181,51 @@ const deleteFeedback = async ({...params}) => {
 	}
 };
 
+/*
+ * Delete Feedbacks by groupId
+ *
+ * @ Required params
+ * @@ id/_id (String : Required)
+ *
+ * @ return Feedback Object
+ *
+ */
+const deleteFeedbacksByGroupId = async (params) => {
+	const {
+		receiver,
+		groupId
+	} = params;
+
+	try {
+		let query = { groupId };
+		if (receiver) {
+			const receiverDbId = Feedback.convertToDbId(receiver);
+			query.receiver = receiverDbId;
+		}
+
+		await Feedback.deleteManyByQuery(query);
+
+		// delete related reflection
+		let reflection = await Reflection.findOne({
+			_id: groupId
+		});
+
+		if (!reflection)
+			throw new Error(Errors.REFLECTION_NOT_FOUND);
+
+		await Reflection.deleteOne({
+			_id: reflection._id
+		});
+	} catch(err) {
+		throw err;
+	}
+};
+
 module.exports = {
-	createFeedback,
+	createFeedbacks,
 	updateFeedback,
-	findfeedbackBySender,
-	findfeedbackByRequester,
-	findfeedbackByRequestId,
 	findfeedbackById,
-	deleteFeedback
+	findFeedbacks,
+	deleteFeedback,
+	deleteFeedbacksByGroupId
 };

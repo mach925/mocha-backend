@@ -7,6 +7,7 @@ import ProfileService from './mocha/profile.service';
 import TrustNetworkService from './mocha/trustNetwork.service';
 import ReflectionService from './mocha/reflection.service';
 import TrustMemberService from './mocha/trustMember.service';
+import FeedbackService from './mocha/feedback.service';
 
 module.exports = {
 	AuthService,
@@ -14,4 +15,5 @@ module.exports = {
 	TrustNetworkService,
 	ReflectionService,
 	TrustMemberService,
+	FeedbackService
 };
