@@ -19,6 +19,7 @@ const createProfile = async ({...params}) => {
 		user_id, 				// Optional
 		name, 					// Optional
 		avatar					// Optional
+		pushToken 			// Optional
 	} = params;
 
 	try {
@@ -26,7 +27,8 @@ const createProfile = async ({...params}) => {
 			phone,
 			user_id,
 			name,
-			avatar
+			avatar,
+			pushToken
 		});
 
 		// To do : Cache profile info
@@ -134,7 +136,7 @@ const findProfileByPhoneorUserId = async (phoneOrUserId) => {
 };
 
 /*
- * Update new profile by id/_id,
+ * Update profile by id/_id,
  *
  * @ Required params
  * @@ id/_id (String : Required)
@@ -148,7 +150,8 @@ const updateProfile = async ({...params}) => {
 		id,
 		name,
 		avatar,
-		point
+		point,
+		pushToken,
 	} = params;
 
 	try {
@@ -160,6 +163,7 @@ const updateProfile = async ({...params}) => {
 		user.name = name || user.name;
 		user.avatar = avatar || user.avatar;
 		user.point = point === undefined ? user.point : point;
+		user.pushToken = pushToken || user.pushToken;
 
 		await user.save();
 
