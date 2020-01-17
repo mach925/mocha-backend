@@ -43,7 +43,7 @@ export default class BaseModel {
   }
 
   async aggregate( params ) {
-    return this.model.aggregate( params );
+    return this.model.aggregate( params ).allowDiskUse(true);
   }
 
   async create( params ) {
