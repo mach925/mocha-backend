@@ -151,8 +151,8 @@ const findFeedbacks = async (id) => {
 					question: '$question',
 					feedback: '$feedback',
 					groupId: '$groupId',
-					created: '$created',
-					updated: '$updated'
+					created: { $add: [new Date(0), '$created'] },
+					updated: { $add: [new Date(0), '$updated'] }
 				}
 			}
 		]);
