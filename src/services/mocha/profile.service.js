@@ -179,44 +179,6 @@ const updateProfile = async ({...params}) => {
 };
 
 /*
- * Update push notification token by id/_id,
- *
- * @ Required params
- * @@ id/_id (String : Required)
- * @@ token (String : Required)
- *
- * @ return User Object
- *
- */
-const updatePushToken = async ({...params}) => {
-	const {
-		_id,
-		id,
-		pushToken,
-	} = params;
-
-	try {
-		let user = await User.findOneById(_id || id);
-
-		if(!user)
-				throw new Error(Errors.PROFILE_NOT_FOUND);
-
-		user.pushToken = pushToken || user.pushToken;
-
-		await user.save();
-
-		// To do : Update cache
-
-
-		return user;
-	} catch(err) {
-		throw err;
-	}
-
-	return id || _id;
-};
-
-/*
  * Delete new profile by id/_id,
  *
  * @ Required params
@@ -272,6 +234,5 @@ module.exports = {
 	findProfileById,
 	findProfileByUserId,
 	updateProfile,
-	updatePushToken,
 	findAllUsers,
 };
