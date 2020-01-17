@@ -18,7 +18,7 @@ const createProfile = async ({...params}) => {
 		phone,
 		user_id, 				// Optional
 		name, 					// Optional
-		avatar					// Optional
+		avatar,					// Optional
 		pushToken 			// Optional
 	} = params;
 
