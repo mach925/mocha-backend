@@ -157,7 +157,11 @@ const findFeedbacks = async (id) => {
 			}
 		]);
 
-		return feedbacks;
+		let latestDate = new Date(Math.max.apply(null, feedbacks.map(function(e) {
+			return new Date(e.updated)
+		})));
+		
+		return {feedbacks: feedbacks, updated: latestDate};
 	} catch(err) {
 		throw err;
 	}
