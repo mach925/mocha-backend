@@ -36,7 +36,6 @@ class FeedbackModel extends BaseModel {
       },
       feedback: {
         type: String,
-        required: true,
         trim: true
       },
       groupId: {
