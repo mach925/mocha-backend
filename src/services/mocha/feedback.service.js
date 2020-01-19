@@ -151,13 +151,13 @@ const findFeedbacks = async (id) => {
 					question: '$question',
 					feedback: '$feedback',
 					groupId: '$groupId',
-					created: { $add: [new Date(0), '$created'] },
-					updated: { $add: [new Date(0), '$updated'] }
+					created: { $toDate: '$created' },
+					updated: { $toDate: '$updated' }
 				}
 			}
 		]);
 
-		let latestDate = new Date(Math.max.apply(null, feedbacks.map(function(e) {
+		const latestDate = new Date(Math.max.apply(null, feedbacks.map(function(e) {
 			return new Date(e.updated)
 		})));
 		
@@ -172,8 +172,6 @@ const findFeedbacks = async (id) => {
  *
  * @ Required params
  * @@ request_id (String : Required) - Reflection DB id
- * @@ requester (String : Required) - User DB id
- * @@ sender (String : Required) - User DB id
  * @@ feedback (String : Required)
  *
  * @ return Feedback Object
@@ -185,7 +183,6 @@ const updateFeedback = async ({...params}) => {
 		id,
 		feedback
 	} = params;
-
 	try {
 		let dbFeedback = await Feedback.findOneById(_id || id);
 
@@ -204,8 +201,6 @@ const updateFeedback = async ({...params}) => {
 	} catch(err) {
 		throw err;
 	}
-
-	return id || _id;
 };
 
 /*
@@ -270,9 +265,12 @@ const deleteFeedbacksByGroupId = async (params) => {
 		if (!reflection)
 			throw new Error(Errors.REFLECTION_NOT_FOUND);
 
-		await Reflection.deleteOne({
-			_id: reflection._id
-		});
+		const dbFeedback = Feedback.findOne({ groupId	})
+
+		if (!dbFeedback)
+			await Reflection.deleteOne({
+				_id: reflection._id
+			});
 	} catch(err) {
 		throw err;
 	}
