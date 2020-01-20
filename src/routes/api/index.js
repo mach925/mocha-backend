@@ -10,6 +10,7 @@ route.use('/user', require('./user'));
 route.use('/network', require('./network'));
 route.use('/reflection', require('./reflection'));
 route.use('/feedback', require('./feedback'));
+route.use('/member', require('./trustmember'));
 
 route.get('/health-check', require('./health.check'));
 

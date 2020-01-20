@@ -108,6 +108,33 @@ const findAllUserTrustMembers = async ({...params}) => {
 		const {
 			_id,
 			id,
+		} = params;
+
+		let trustMembers = await TrustMember.find({
+			owner: _id || id
+		});
+
+		return trustMembers;
+	} catch(err) {
+		throw err;
+	}
+};
+
+/*
+ * returns all trust member of user by status,
+ *
+ * @ Required params
+ * @@ id/_id (String, Requried) : User's DB id
+ * @@ status (Number, Requried)
+ *
+ * @ return List of TrustMember Object
+ *
+ */
+const findAllUserTrustMembersByStatus = async ({...params}) => {
+	try {
+		const {
+			_id,
+			id,
 			status
 		} = params;
 
@@ -122,8 +149,38 @@ const findAllUserTrustMembers = async ({...params}) => {
 	}
 };
 
+/*
+ * delete member by member db id
+ *
+ * @ Required params
+ * @@ id/_id (String, Requried) : reflection's DB id
+ *
+ * @ return deleted Member Object
+ *
+ */
+const deleteMemberById = async (id) => {
+	try {
+		let member = await TrustMember.findOne({
+			_id: id
+		});
+
+		if (!member)
+			throw new Error(Errors.MEMBER_NOT_FOUND);
+
+		await TrustMember.deleteOne({
+			_id: member._id
+		});
+
+		return member;
+	} catch(err) {
+		throw err;
+	}
+};
+
 module.exports = {
+	requestTrustMember,
 	acceptOrAddTrustMember,
 	findAllUserTrustMembers,
-	requestTrustMember,
+	findAllUserTrustMembersByStatus,
+	deleteMemberById
 };
