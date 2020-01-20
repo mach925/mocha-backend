@@ -151,8 +151,8 @@ const findFeedbacks = async (id) => {
 					question: '$question',
 					feedback: '$feedback',
 					groupId: '$groupId',
-					created: { $toDate: '$created' },
-					updated: { $toDate: '$updated' }
+					created: { $convert: { input: '$created', to: "date" }},
+					updated: { $convert: { input: '$updated', to: "date" }}
 				}
 			}
 		]);
