@@ -1,6 +1,7 @@
 /*
  This file provides apis related with trust network.
 */
+import TrustMemberService from './trustMember.service';
 import { TrustNetwork } from '../../models/trustNetwork.model';
 import Errors from '../../constants/error.constant';
 
@@ -30,6 +31,12 @@ const createUserTrustNetwork = async ({...params}) => {
 
 	try {
 		const ownerDbId = TrustNetwork.convertToDbId(ownerId);
+
+		for (const memberId of members) {
+			const joinerDbId = TrustMember.convertToDbId(memberId);
+
+			await TrustMemberService.acceptOrAddTrustMember({owner: ownerDbId, joiner: joinerDbId});
+		}
 
 		const network = await TrustNetwork.create({
 			owner: ownerDbId,
