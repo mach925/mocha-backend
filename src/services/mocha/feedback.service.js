@@ -187,9 +187,10 @@ const updateFeedback = async ({...params}) => {
 		let dbFeedback = await Feedback.findOneById(_id || id);
 
 		if(!dbFeedback)
-				throw new Error(Errors.FEEDBACK_NOT_FOUND);
+			throw new Error(Errors.FEEDBACK_NOT_FOUND);
 
-		dbFeedback.pending = feedback.pending || dbFeedback.pending;
+		if (feedback.pending !== undefined)
+			dbFeedback.pending = feedback.pending;
 		dbFeedback.question = feedback.question || dbFeedback.question;
 		dbFeedback.feedback = feedback.feedback || dbFeedback.feedback;
 
