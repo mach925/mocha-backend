@@ -153,7 +153,7 @@ const findAllUserTrustMembersByStatus = async ({...params}) => {
  * delete member by member db id
  *
  * @ Required params
- * @@ id/_id (String, Requried) : reflection's DB id
+ * @@ id/_id (String, Requried) : TrustMember's DB id
  *
  * @ return deleted Member Object
  *
