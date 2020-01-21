@@ -114,7 +114,11 @@ const findAllUserTrustMembers = async ({...params}) => {
 			owner: _id || id
 		});
 
-		return trustMembers;
+		const latestDate = new Date(Math.max.apply(null, trustMembers.map(function(e) {
+			return new Date(e.updated)
+		})));
+
+		return { contacts: trustMembers, updated: latestDate };
 	} catch(err) {
 		throw err;
 	}
@@ -143,7 +147,11 @@ const findAllUserTrustMembersByStatus = async ({...params}) => {
 			status: status
 		});
 
-		return trustMembers;
+		const latestDate = new Date(Math.max.apply(null, trustMembers.map(function(e) {
+			return new Date(e.updated)
+		})));
+
+		return { contacts: trustMembers, updated: latestDate };
 	} catch(err) {
 		throw err;
 	}

@@ -33,7 +33,7 @@ const createUserTrustNetwork = async ({...params}) => {
 		const ownerDbId = TrustNetwork.convertToDbId(ownerId);
 
 		for (const memberId of members) {
-			const joinerDbId = TrustMember.convertToDbId(memberId);
+			const joinerDbId = TrustNetwork.convertToDbId(memberId);
 
 			await TrustMemberService.acceptOrAddTrustMember({owner: ownerDbId, joiner: joinerDbId});
 		}
