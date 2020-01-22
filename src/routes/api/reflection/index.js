@@ -3,6 +3,7 @@ const express = require('express');
 const route = express();
 
 route.post('/', require('./create.reflection'));
+route.get('/list/user/:id', require('./get.reflection'));
 route.patch('/:id', require('./update.reflection'));
 route.delete('/:id', require('./remove.reflection'));
 route.get('/list/:type', require('./list.reflection'));
