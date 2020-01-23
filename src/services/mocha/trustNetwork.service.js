@@ -3,6 +3,7 @@
 */
 import TrustMemberService from './trustMember.service';
 import { TrustNetwork } from '../../models/trustNetwork.model';
+import { TrustMember } from '../../models/trustMember.model';
 import Errors from '../../constants/error.constant';
 
 /*
@@ -198,8 +199,21 @@ const deleteTrustNetworkById = async (id) => {
 			_id: network._id
 		});
 
+		if (network.members.length !== 0) {
+			for (const memberId of network.members) {
+				let otherNetwork = await TrustNetwork.findOne({
+					members: { $elemMatch: { $eq: memberId } }
+				})
+				
+				if (!otherNetwork) {
+					TrustMember.deleteOne({ owner: network.owner, joiner: memberId })
+				}
+			}
+		}
+
 		return network;
 	} catch(err) {
+		console.log(err)
 		throw err;
 	}
 };

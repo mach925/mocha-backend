@@ -34,13 +34,19 @@ const requestTrustMember = async ({...params}) => {
 		if (!ownerDbId || !joinerDbId) 
 			throw new Error(Errors.PROFILE_NOT_FOUND);
 
-		const trustMember = await TrustMember.create({
-			owner: ownerDbId,
-			joiner: joinerDbId,
-			status: STATES.STATE_PENDING
-		});
-		
-		return trustMember;
+		const trustMember = await TrustMember.findOne({owner: ownerDbId, joiner: joinerDbId});
+
+		if (trustMember) {
+			return trustMember;
+		} else {
+			const trustMember = await TrustMember.create({
+				owner: ownerDbId,
+				joiner: joinerDbId,
+				status: STATES.STATE_PENDING
+			});
+			
+			return trustMember;
+		}
 	} catch (err) {
 		throw err;
 	}
