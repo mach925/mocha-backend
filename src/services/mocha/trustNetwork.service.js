@@ -202,6 +202,7 @@ const deleteTrustNetworkById = async (id) => {
 		if (network.members.length !== 0) {
 			for (const memberId of network.members) {
 				let otherNetwork = await TrustNetwork.findOne({
+					owner: network.owner,
 					members: { $elemMatch: { $eq: memberId } }
 				})
 				
