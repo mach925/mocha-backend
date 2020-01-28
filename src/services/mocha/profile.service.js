@@ -148,6 +148,7 @@ const updateProfile = async ({...params}) => {
 	const {
 		_id,
 		id,
+		user_id,
 		name,
 		avatar,
 		point,
@@ -160,6 +161,7 @@ const updateProfile = async ({...params}) => {
 		if(!user)
 				throw new Error(Errors.PROFILE_NOT_FOUND);
 
+		user.user_id = user_id || user.user_id;
 		user.name = name || user.name;
 		user.avatar = avatar || user.avatar;
 		user.point = point === undefined ? user.point : point;
