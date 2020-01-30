@@ -146,7 +146,7 @@ const findFeedbacks = async (id) => {
 					receiver: {
 						_id: '$receiverInfo._id',
 						name: '$receiverInfo.name',
-						avatar: '$receiverInfo.profile.avatar'
+						avatar: '$receiverInfo.avatar'
 					},
 					question: '$question',
 					feedback: '$feedback',
